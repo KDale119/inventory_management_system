@@ -1,14 +1,25 @@
 package edu.mcc.codeschool.inventorySystem.models;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.UUID;
 
 public class Product {
-    UUID id;
-    String name;
-    Double price;
-    int quantity;
-    String supplier;
-    String brand;
+    @NotNull
+    private UUID id;
+    @NotNull
+    private String name;
+    @NotNull
+    @Min(0)
+    @Max(1000)
+    private Double price;
+    @Min(0)
+    @Max(500)
+    private int quantity;
+    private String supplier;
+    private String brand;
 
     public UUID getId() {
         return id;
@@ -57,4 +68,5 @@ public class Product {
     public void setBrand(String brand) {
         this.brand = brand;
     }
+
 }
