@@ -22,6 +22,7 @@ public class ProductService {
 
 
     public Product createProduct(Product product) {
+//        Product product = new Product();
         product.setId(UUID.randomUUID());
         products.add(product);
         return product;

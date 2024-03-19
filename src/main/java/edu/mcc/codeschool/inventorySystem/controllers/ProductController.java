@@ -30,20 +30,16 @@ public class ProductController {
     public ResponseEntity<Product> getProductByID(@Valid @PathVariable String id) {
         return productService.getProduct(id);
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable String id, @Valid @RequestBody Product update) {
         return productService.updateProduct(id, update);
     }
-
     @PutMapping("/{id}/stock")
     public ResponseEntity<Product> updatedStock(@PathVariable String id, @RequestBody Product stock){
         return productService.updateStock(id, stock);
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable String id) {
         return productService.deleteProduct(id);
     }
-
 }
