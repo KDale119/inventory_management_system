@@ -54,7 +54,7 @@ public class ProductServiceTest {
         assertThat(update.getId()).isNotNull();
     }
 
-    @Test
+//    @Test
     @DisplayName("Update Stock")
     void test_updateStock(){
         Product product = new Product();

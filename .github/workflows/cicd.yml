@@ -17,3 +17,9 @@ jobs:
           java-version: '21'
       - name: build
         run: mvn clean install
+      - name: login-to-docker
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: docker build
+        run: docker build -t kdale119/inventory-system .
+      - name: docker publish
+        run: docker push kdale119/inventory-system:latest
