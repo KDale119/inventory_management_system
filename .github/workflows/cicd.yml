@@ -23,3 +23,14 @@ jobs:
         run: docker build -t kdale119/inventory-system .
       - name: docker publish
         run: docker push kdale119/inventory-system:latest
+
+  deploy:
+    needs: build
+    runs-on: [aws-ec2-runner]
+    steps:
+      - name: pull-docker-img
+        run: sudo docker pull kdale119/inventory-system:latest
+      - name: remove-running-container
+        run: sudo docker rm -f inventory-system
+      - name: run-container
+        run: sudo docker run -d -p --name inventory-system kdale119/inventory-system:latest
