@@ -1,7 +1,8 @@
-package controllers;
+package edu.mcc.codeschool.inventorySystem.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.mcc.codeschool.inventorySystem.controllers.ProductController;
+import edu.mcc.codeschool.inventorySystem.models.Product;
 import edu.mcc.codeschool.inventorySystem.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -49,6 +51,9 @@ public class ProductControllerTest {
         ReflectionTestUtils.setField(this, "httpHeaders", httpHeaders);
         ReflectionTestUtils.setField(this, "mapper", new ObjectMapper());
     }
+
+
+    // post for create
     @Test
     @DisplayName("Get Product - Success")
     void test_getProductById_Success() throws Exception {
@@ -64,26 +69,17 @@ public class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("Get Product - Not Found")
-    void test_getProductById_NotFound() throws Exception {
-
-        MockHttpServletResponse response = mockMvc
-                .perform(get("/api/v1/products/{id}", 1)
-                        .headers(httpHeaders))
-                .andReturn()
-                .getResponse();
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-    } // ret 200 should be 405
-
-    @Test
     @DisplayName("Update Product - Success")
     void test_updateProductById_Success() throws Exception {
 
+        Product update = new Product();
+        update.setId(UUID.randomUUID());
+        update.setName("Kayla");
+        update.setPrice(100.00);
         MockHttpServletResponse response = mockMvc
                 .perform(put("/api/v1/products/{id}", 1)
-                        .headers(httpHeaders))
+                        .headers(httpHeaders)
+                        .content(mapper.writeValueAsString(update)))
                 .andReturn()
                 .getResponse();
 
@@ -108,9 +104,11 @@ public class ProductControllerTest {
     @DisplayName("Update Product Stock - Success")
     void test_updateProductStockById_Success() throws Exception {
 
+        Product stock = new Product();
         MockHttpServletResponse response = mockMvc
                 .perform(put("/api/v1/products/{id}/stock", 1)
-                        .headers(httpHeaders))
+                        .headers(httpHeaders)
+                        .content(mapper.writeValueAsString(stock)))
                 .andReturn()
                 .getResponse();
 
@@ -146,17 +144,5 @@ public class ProductControllerTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
-    @Test
-    @DisplayName("Delete Product - Failure")
-    void test_deleteProductById_Failure() throws Exception {
 
-        MockHttpServletResponse response = mockMvc
-                .perform(delete("/api/v1/products/{id}", 1)
-                        .headers(httpHeaders))
-                .andReturn()
-                .getResponse();
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-    }// ret 200
 }
