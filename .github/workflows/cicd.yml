@@ -33,4 +33,4 @@ jobs:
       - name: remove-running-container
         run: sudo docker rm -f inventory-system
       - name: run-container
-        run: sudo docker run -d -p --name inventory-system kdale119/inventory-system:latest
+        run: sudo docker run -d -p 8080:8080 --name inventory-system kdale119/inventory-system:latest
