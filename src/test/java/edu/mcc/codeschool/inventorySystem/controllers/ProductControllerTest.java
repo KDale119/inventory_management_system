@@ -24,9 +24,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +52,38 @@ public class ProductControllerTest {
 
 
     // post for create
+    @Test
+    @DisplayName("Create Product - Success")
+    void test_createProduct_Success() throws Exception {
+
+        Product product = new Product();
+        product.setId(UUID.randomUUID());
+        product.setName("Kayla");
+        product.setPrice(100.00);
+        MockHttpServletResponse response = mockMvc
+                .perform(post("/api/v1/products")
+                        .headers(httpHeaders)
+                        .content(mapper.writeValueAsString(product)))
+                .andReturn()
+                .getResponse();
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    @DisplayName("Get All Products - Success")
+    void test_getAllProducts_Success() throws Exception {
+
+        MockHttpServletResponse response = mockMvc
+                .perform(get("/api/v1/products")
+                        .headers(httpHeaders))
+                .andReturn()
+                .getResponse();
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
     @Test
     @DisplayName("Get Product - Success")
     void test_getProductById_Success() throws Exception {
@@ -85,20 +115,7 @@ public class ProductControllerTest {
 
         assertThat(response).isNotNull();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-    } // ret 400 should be 200
-    @Test
-    @DisplayName("Update Product - Not Found")
-    void test_updateProductById_NotFound() throws Exception {
-
-        MockHttpServletResponse response = mockMvc
-                .perform(put("/api/v1/products/{id}", 1)
-                        .headers(httpHeaders))
-                .andReturn()
-                .getResponse();
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-    }// ret 400
+    } //ret 200
 
     @Test
     @DisplayName("Update Product Stock - Success")

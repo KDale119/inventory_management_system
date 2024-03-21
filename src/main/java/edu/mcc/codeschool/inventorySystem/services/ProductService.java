@@ -22,7 +22,6 @@ public class ProductService {
 
 
     public Product createProduct(Product product) {
-//        Product product = new Product();
         product.setId(UUID.randomUUID());
         products.add(product);
         return product;
@@ -47,8 +46,10 @@ public class ProductService {
             products.remove(prdct.get());
             products.add(update);
             return ResponseEntity.ok(update);
-        } else {
+        } else if(update == null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -60,6 +61,8 @@ public class ProductService {
             currentProduct.setQuantity(stock.getQuantity());
             products.add(currentProduct);
             return ResponseEntity.ok(currentProduct);
+        } else if(stock == null){
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -67,11 +70,14 @@ public class ProductService {
 
     public ResponseEntity<Product> deleteProduct(@PathVariable String id) {
         Optional<Product> prdct = products.stream().filter(products -> products.getId().toString().equals(id)).findFirst();
-        if (prdct.get().getQuantity() == 0) {
+        if (prdct.isPresent() && prdct.get().getQuantity() == 0) {
             products.remove(prdct.get());
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        } else if(prdct.isPresent() && prdct.get().getQuantity() > 0) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
         }
     }
 }
