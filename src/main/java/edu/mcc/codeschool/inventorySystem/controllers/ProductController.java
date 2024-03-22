@@ -2,6 +2,7 @@ package edu.mcc.codeschool.inventorySystem.controllers;
 
 import edu.mcc.codeschool.inventorySystem.models.Product;
 import edu.mcc.codeschool.inventorySystem.services.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@Tag(name = "Product Controller")
 public class ProductController {
     private final ProductService productService;
 

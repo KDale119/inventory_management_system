@@ -69,16 +69,9 @@ public class ProductServiceTest {
     @Test
     @DisplayName("Update Product - Bad Request")
     void test_updateProduct_BadRequest(){
-        Product product = new Product();
-        product = subject.createProduct(product);
-        Product update = new Product();
-        update.setId(UUID.randomUUID());
-        update.setName("tom");
-        update.setPrice(10000000.00);
 
-        ResponseEntity<Product> response = subject.updateProduct("1", update);
-        assertThat(update.getId()).isNotNull();
-        assertThat(response.getStatusCode().value()).isEqualTo(404);
+        ResponseEntity<Product> response = subject.updateProduct("1", null);
+        assertThat(response.getStatusCode().value()).isEqualTo(400);
     }
     @Test
     @DisplayName("Update Product - Not Found")
@@ -107,16 +100,8 @@ public class ProductServiceTest {
     @Test
     @DisplayName("Update Stock - Bad Request")
     void test_updateStock_BadRequest(){
-        Product product = new Product();
-        product = subject.createProduct(product);
-        Product stock = new Product();
-        stock.setId(UUID.randomUUID());
-        stock.setName("tom");
-        stock.setPrice(1005.00);
-
-
-        ResponseEntity<Product> response = subject.updateStock(stock.getId().toString(), stock);
-        assertThat(response.getStatusCode().value()).isEqualTo(404);
+        ResponseEntity<Product> response = subject.updateStock("123", null);
+        assertThat(response.getStatusCode().value()).isEqualTo(400);
     }
     @Test
     @DisplayName("Update Stock - Not Found")
@@ -140,11 +125,11 @@ public class ProductServiceTest {
     @DisplayName("Delete Product - Bad Request")
     void test_deleteProduct_BadRequest(){
         Product product = new Product();
-        product = subject.createProduct(product);
         product.setQuantity(10);
+        product = subject.createProduct(product);
 
-        ResponseEntity<Product> response = subject.deleteProduct("1");
-        assertThat(response.getStatusCode().value()).isEqualTo(404);
+        ResponseEntity<Product> response = subject.deleteProduct(product.getId().toString());
+        assertThat(response.getStatusCode().value()).isEqualTo(400);
     }
     @Test
     @DisplayName("Delete Product - Not Found")
